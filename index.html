@@ -1,10 +1,1066 @@
 <!DOCTYPE html>
 <html lang="th">
-<head><meta charset="UTF-8"><title>week02</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONG // PROFILE & MECHA STORE</title>
+  <!-- Google Fonts: Prompt สำหรับภาษาไทย และ Orbitron สไตล์ Cyberpunk/Sci-Fi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0a0c14;
+      --bg-card: rgba(16, 21, 37, 0.85);
+      --bg-card-hover: rgba(23, 31, 55, 0.95);
+      --neon-cyan: #00f3ff;
+      --neon-pink: #ff007f;
+      --neon-purple: #9d4edd;
+      --text-main: #f0f4ff;
+      --text-muted: #8e9bb4;
+      --border-glow: rgba(0, 243, 255, 0.25);
+      --border-accent: rgba(255, 0, 127, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    }
+
+    /* Sci-Fi Titles */
+    .cyber-font {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    /* =========================================
+       1. หน้าจอประตูกดเข้า (ACCESS GATE SCREEN)
+       ========================================= */
+    #gate-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #0e1322 0%, #05070c 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s cubic-bezier(0.7, 0, 0.3, 1), transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+
+    #gate-screen.unlocked {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+
+    .gate-container {
+      text-align: center;
+      padding: 2.5rem;
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      background: rgba(10, 14, 26, 0.8);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 50px rgba(0, 243, 255, 0.15), inset 0 0 30px rgba(0, 243, 255, 0.05);
+      position: relative;
+      max-width: 90%;
+      width: 480px;
+      animation: floatPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 40px rgba(0, 243, 255, 0.15); }
+      50% { transform: translateY(-8px); box-shadow: 0 0 60px rgba(0, 243, 255, 0.3); }
+    }
+
+    .gate-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+      background: rgba(0, 243, 255, 0.1);
+      text-transform: uppercase;
+    }
+
+    .gate-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+      margin-bottom: 0.5rem;
+    }
+
+    .gate-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.2rem;
+    }
+
+    /* ปุ่มกดเข้าสุดเท่ */
+    .enter-btn {
+      position: relative;
+      background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(255, 0, 127, 0.15));
+      border: 2px solid var(--neon-cyan);
+      color: #fff;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    }
+
+    .enter-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 35px var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+
+    .enter-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* =========================================
+       2. หน้าเว็บไซต์หลัก (MAIN CONTENT)
+       ========================================= */
+    #main-content {
+      opacity: 0;
+      transition: opacity 1s ease 0.3s;
+      min-height: 100vh;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 8%;
+      background: rgba(10, 12, 20, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-glow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo span {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .gate-lock-btn {
+      background: transparent;
+      border: 1px solid var(--border-accent);
+      color: var(--neon-pink);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .gate-lock-btn:hover {
+      background: var(--neon-pink);
+      color: #fff;
+      box-shadow: 0 0 15px var(--neon-pink);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 5rem 8% 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-info {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .system-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #00ff88;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: rgba(0, 255, 136, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff88;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-name {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #fff 0%, var(--neon-cyan) 60%, var(--neon-pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-tagline {
+      font-size: 1.25rem;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      max-width: 580px;
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--neon-cyan);
+      color: #05070e;
+      padding: 0.85rem 1.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      padding: 0.85rem 1.8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border-glow);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 243, 255, 0.1);
+      border-color: var(--neon-cyan);
+    }
+
+    /* Hero Avatar/Visual Card */
+    .hero-visual {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px dashed var(--neon-cyan);
+      opacity: 0.5;
+      animation: spin 20s linear infinite;
+    }
+
+    .visual-ring-2 {
+      position: absolute;
+      width: 85%;
+      height: 85%;
+      border-radius: 50%;
+      border: 2px solid var(--neon-pink);
+      opacity: 0.4;
+      animation: spinReverse 15s linear infinite;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
+
+    .avatar-box {
+      width: 230px;
+      height: 230px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #161d33, #0a0e1c);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 35px rgba(0, 243, 255, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-box i {
+      font-size: 5.5rem;
+      color: var(--neon-cyan);
+      filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.6));
+    }
+
+    .avatar-label {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* Section Styling */
+    .section {
+      padding: 4.5rem 8%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-tag {
+      color: var(--neon-pink);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Profile / About Cards */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .cyber-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 14px;
+      padding: 1.8rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyber-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--neon-cyan);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cyber-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 10px 25px rgba(0, 243, 255, 0.15);
+      background: var(--bg-card-hover);
+    }
+
+    .cyber-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .card-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .card-highlight {
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    /* =========================================
+       3. STORE & PROJECT SHOWCASE (ร้านโมเดลหุ่น)
+       ========================================= */
+    .store-banner {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(0, 243, 255, 0.15));
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .store-banner-text h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .store-banner-text p {
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .model-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .model-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--neon-pink);
+      box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
+    }
+
+    .model-thumb {
+      height: 180px;
+      background: radial-gradient(circle, #251b3d 0%, #0d111d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .model-thumb i {
+      font-size: 4.5rem;
+      color: rgba(255, 255, 255, 0.85);
+      transition: transform 0.3s;
+    }
+
+    .model-card:hover .model-thumb i {
+      transform: scale(1.15) rotate(5deg);
+      color: var(--neon-pink);
+    }
+
+    .model-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    .model-content {
+      padding: 1.4rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .model-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .model-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    .model-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1rem;
+    }
+
+    .model-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+    }
+
+    .order-btn {
+      background: transparent;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .order-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 12px var(--neon-cyan);
+    }
+
+    /* Skills Badges */
+    .skills-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .skill-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glow);
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+
+    .skill-pill i {
+      color: var(--neon-cyan);
+    }
+
+    .skill-pill:hover {
+      background: rgba(0, 243, 255, 0.12);
+      border-color: var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+
+    /* Contact & Footer */
+    .footer {
+      background: #06080d;
+      border-top: 1px solid var(--border-glow);
+      padding: 3rem 8% 2rem;
+      text-align: center;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glow);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    .social-btn:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px var(--neon-cyan);
+    }
+
+    .copyright {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Modal แจ้งเตือนการสั่งซื้อ/ดูสินค้า */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #111625;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .modal-close-btn {
+      margin-top: 1.5rem;
+      background: var(--neon-cyan);
+      color: #000;
+      border: none;
+      padding: 8px 24px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar { padding: 1rem 5%; }
+      .nav-links { display: none; } /* ซ่อนเมนูบนมือถือเพื่อความกระชับ */
+      .hero { padding: 3rem 5% 2rem; text-align: center; }
+      .hero-desc { margin: 0 auto 2rem; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { margin: 0 auto; width: 260px; height: 260px; }
+      .avatar-box { width: 190px; height: 190px; }
+      .avatar-box i { font-size: 4rem; }
+      .hero-name { font-size: 2.4rem; }
+      .section { padding: 3rem 5%; }
+    }
+  </style>
+</head>
 <body>
-<h1>หน้าแนะนำตัว</h1>
-<p>ชื่อเล่น: อ๋องงงงงงงงงง</p>
-<p>สาขา: คอมพิวเตอร์ธุรกิจ</p>
-<p>ร้านโครงงาน: ร้านขายโมเดลหุ่น</p>
+
+  <!-- =========================================
+       1. หน้าจอประตูกดเข้า (ACCESS GATE SCREEN)
+       ========================================= -->
+  <div id="gate-screen">
+    <div class="gate-container">
+      <span class="gate-badge cyber-font"><i class="fas fa-shield-alt"></i> SYSTEM READY // V2.0</span>
+      <h1 class="gate-title cyber-font">ONG SYSTEM</h1>
+      <p class="gate-subtitle">ยินดีต้อนรับสู่พอร์ตโฟลิโอ & ร้านโครงงานโมเดลหุ่น</p>
+      
+      <button class="enter-btn cyber-font" id="btn-enter" onclick="unlockSystem()">
+        <i class="fas fa-power-off"></i> ENTER SYSTEM
+      </button>
+
+      <div style="margin-top: 1.5rem; font-size: 0.75rem; color: #64748b;">
+        กดปุ่มเพื่อเริ่มการเชื่อมต่อและเข้าชมข้อมูล
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       2. หน้าหลัก (MAIN CONTENT)
+       ========================================= -->
+  <div id="main-content">
+    
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-logo cyber-font">
+        <i class="fas fa-robot"></i> <span>ONG</span>.STUDIO
+      </div>
+      <ul class="nav-links">
+        <li><a href="#about"><i class="fas fa-user"></i> เกี่ยวกับฉัน</a></li>
+        <li><a href="#store"><i class="fas fa-cube"></i> ร้านโมเดลหุ่น</a></li>
+        <li><a href="#skills"><i class="fas fa-code"></i> ทักษะ & การศึกษา</a></li>
+        <li><a href="#contact"><i class="fas fa-paper-plane"></i> ติดต่อ</a></li>
+      </ul>
+      <button class="gate-lock-btn cyber-font" onclick="lockSystem()" title="กลับหน้ากดเข้า">
+        <i class="fas fa-lock"></i> LOCK
+      </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-info">
+        <div class="system-status cyber-font">
+          <span class="status-dot"></span> IDENTITY VERIFIED // ONLINE
+        </div>
+        <h1 class="hero-name">สวัสดีครับ, ผม "อ๋อง"</h1>
+        <h2 class="hero-tagline">นักศึกษาคอมพิวเตอร์ธุรกิจ & ผู้ก่อตั้งร้านโมเดลหุ่น</h2>
+        <p class="hero-desc">
+          ยินดีต้อนรับสู่พื้นที่แนะนำตัวและโชว์รูมโครงงานของผม ผสมผสานความรู้ทางธุรกิจคอมพิวเตอร์ 
+          ระบบ E-Commerce และความหลงใหลในโลกของหุ่นยนต์และโมเดลสะสมสุดเท่!
+        </p>
+        <div class="hero-actions">
+          <a href="#store" class="btn-primary cyber-font"><i class="fas fa-store"></i> ชมร้านโครงงาน</a>
+          <a href="#about" class="btn-secondary"><i class="fas fa-id-card"></i> ข้อมูลแนะนำตัว</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-ring"></div>
+        <div class="visual-ring-2"></div>
+        <div class="avatar-box">
+          <i class="fas fa-robot"></i>
+          <span class="avatar-label cyber-font">MECHA PILOT // ONG</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <div class="section-header">
+        <div class="section-tag cyber-font">// PERSONAL PROFILE</div>
+        <h2 class="section-title">ข้อมูลส่วนตัว & แนะนำตัว</h2>
+      </div>
+
+      <div class="profile-grid">
+        <div class="cyber-card">
+          <div class="card-icon"><i class="fas fa-user-astronaut"></i></div>
+          <h3 class="card-title">ชื่อเล่น</h3>
+          <p class="card-text">
+            เรียกผมว่า <span class="card-highlight">"อ๋อง"</span> (Ong)<br>
+            ผู้ชื่นชอบเทคโนโลยีและงานอดิเรกด้านโมเดลฟิกเกอร์หุ่นยนต์
+          </p>
+        </div>
+
+        <div class="cyber-card">
+          <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+          <h3 class="card-title">สาขาวิชา</h3>
+          <p class="card-text">
+            <span class="card-highlight">คอมพิวเตอร์ธุรกิจ</span> (Business Computer)<br>
+            ศึกษาด้านเทคโนโลยีสารสนเทศ การจัดการฐานข้อมูล และการพัฒนาระบบธุรกิจดิจิทัล
+          </p>
+        </div>
+
+        <div class="cyber-card">
+          <div class="card-icon"><i class="fas fa-rocket"></i></div>
+          <h3 class="card-title">เป้าหมาย & โครงงาน</h3>
+          <p class="card-text">
+            นำความรู้คอมพิวเตอร์ธุรกิจมาพัฒนาระบบร้านค้าออนไลน์ 
+            <span class="card-highlight">"ร้านขายโมเดลหุ่น"</span> ให้ตอบโจทย์คอมมูนิตี้คนรักหุ่นยนต์
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Store & Project Section -->
+    <section id="store" class="section" style="background: rgba(14, 18, 32, 0.4);">
+      <div class="section-header">
+        <div class="section-tag cyber-font">// PROJECT SHOWCASE</div>
+        <h2 class="section-title">ร้านโครงงาน : ร้านขายโมเดลหุ่น</h2>
+      </div>
+
+      <div class="store-banner">
+        <div class="store-banner-text">
+          <h3><i class="fas fa-warehouse" style="color: var(--neon-cyan);"></i> ONG MECHA & MODEL STORE</h3>
+          <p>
+            โครงงานร้านค้าโมเดลหุ่นยนต์และของเล่นสะสม จำหน่ายหุ่นประกอบ Gunpla, Action Figure, งานคัสตอมทำสี และอุปกรณ์เสริมสำหรับนักต่อโมเดล
+          </p>
+        </div>
+        <button class="btn-primary cyber-font" onclick="showNotice('ระบบร้านค้าโครงงาน', 'ระบบจำลองร้านค้าโมเดลหุ่น สำหรับวิชาคอมพิวเตอร์ธุรกิจ พัฒนาด้วยความประณีต!')">
+          <i class="fas fa-info-circle"></i> ข้อมูลโครงงาน
+        </button>
+      </div>
+
+      <!-- รายการโมเดลตัวอย่าง -->
+      <div class="model-grid">
+        <!-- Model 1 -->
+        <div class="model-card">
+          <div class="model-thumb">
+            <span class="model-badge cyber-font">HOT // 1/100</span>
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="model-content">
+            <h4 class="model-name">Cyber Striker Mecha</h4>
+            <p class="model-desc">หุ่นยนต์รบสไตล์ Cyberpunk พร้อมชุดเกราะพลังงานและปืนลำแสงคู่ ปรับท่าได้สมจริง</p>
+            <div class="model-footer">
+              <span class="model-price cyber-font">฿ 1,890</span>
+              <button class="order-btn" onclick="showNotice('Cyber Striker Mecha', 'สินค้าพร้อมส่ง! ขนาดสเกล 1/100 รายละเอียดคมชัด มีไฟ LED ที่ตา')">
+                <i class="fas fa-eye"></i> ดูตัวอย่าง
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 2 -->
+        <div class="model-card">
+          <div class="model-thumb">
+            <span class="model-badge cyber-font" style="border-color: var(--neon-pink); color: var(--neon-pink);">LIMITED</span>
+            <i class="fas fa-shield-virus"></i>
+          </div>
+          <div class="model-content">
+            <h4 class="model-name">Valkyrie Heavy Armor</h4>
+            <p class="model-desc">โมเดลเกราะหนักติดตั้งปืนใหญ่พลาสม่า ชิ้นส่วนเคลือบสีพิเศษ Metallic Titanium</p>
+            <div class="model-footer">
+              <span class="model-price cyber-font">฿ 2,450</span>
+              <button class="order-btn" onclick="showNotice('Valkyrie Heavy Armor', 'รุ่นลิมิเต็ดสีพิเศษ ชิ้นส่วนเหล็ก Die-cast บางส่วน แข็งแรงและมีน้ำหนักดีมาก')">
+                <i class="fas fa-eye"></i> ดูตัวอย่าง
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model 3 -->
+        <div class="model-card">
+          <div class="model-thumb">
+            <span class="model-badge cyber-font">CUSTOM</span>
+            <i class="fas fa-microchip"></i>
+          </div>
+          <div class="model-content">
+            <h4 class="model-name">Ghost Recon Unit</h4>
+            <p class="model-desc">หุ่นยนต์ลาดตระเวนความเร็วสูง งานพ่นสีคัสตอมพรางทหาร Weathering สมจริง</p>
+            <div class="model-footer">
+              <span class="model-price cyber-font">฿ 1,650</span>
+              <button class="order-btn" onclick="showNotice('Ghost Recon Unit', 'งานสั่งทำคัสตอมพิเศษ เหมาะสำหรับนักสะสมสายไดโอรามา')">
+                <i class="fas fa-eye"></i> ดูตัวอย่าง
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <div class="section-header">
+        <div class="section-tag cyber-font">// CAPABILITIES</div>
+        <h2 class="section-title">ทักษะและความสามารถ</h2>
+      </div>
+
+      <div class="skills-wrapper">
+        <div class="skill-pill"><i class="fas fa-laptop-code"></i> การเขียนโปรแกรมเว็บเบื้องต้น (HTML/CSS)</div>
+        <div class="skill-pill"><i class="fas fa-chart-line"></i> วิเคราะห์ระบบธุรกิจคอมพิวเตอร์</div>
+        <div class="skill-pill"><i class="fas fa-shopping-cart"></i> บริหารจัดการ E-Commerce & คลังสินค้า</div>
+        <div class="skill-pill"><i class="fas fa-database"></i> ฐานข้อมูลและสารสนเทศ</div>
+        <div class="skill-pill"><i class="fas fa-tools"></i> การประกอบและคัสตอมโมเดลหุ่นยนต์</div>
+      </div>
+    </section>
+
+    <!-- Contact & Footer -->
+    <footer id="contact" class="footer">
+      <div class="section-tag cyber-font">// GET IN TOUCH</div>
+      <h3 style="font-size: 1.6rem; margin-bottom: 1.5rem; color: #fff;">ช่องทางการติดต่อ</h3>
+
+      <div class="social-links">
+        <a href="javascript:void(0)" class="social-btn" onclick="showNotice('Facebook', 'ติดต่อ Facebook: อ๋อง หรือแฟนเพจร้านโมเดลหุ่น')" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="javascript:void(0)" class="social-btn" onclick="showNotice('Line Official', 'LINE ID: @ongmecha')" title="LINE"><i class="fab fa-line"></i></a>
+        <a href="javascript:void(0)" class="social-btn" onclick="showNotice('Instagram', 'IG: @ong.mecha.model')" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="javascript:void(0)" class="social-btn" onclick="showNotice('GitHub', 'GitHub: Ong-Dev')" title="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+
+      <p class="copyright">
+        © 2026 Developed by <strong style="color: var(--neon-cyan);">อ๋อง</strong> | สาขาคอมพิวเตอร์ธุรกิจ | โครงงานร้านขายโมเดลหุ่น
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Modal กล่องข้อความแจ้งเตือนรายละเอียด -->
+  <div class="modal-overlay" id="custom-modal">
+    <div class="modal-box">
+      <div class="modal-icon"><i class="fas fa-info-circle"></i></div>
+      <h3 id="modal-title" style="color: #fff; margin-bottom: 0.5rem; font-size: 1.3rem;">ข้อมูล</h3>
+      <p id="modal-message" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;"></p>
+      <button class="modal-close-btn" onclick="closeNotice()">ตกลง</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // สร้างเสียง Effect Sci-fi สั้นๆ ด้วย Web Audio API (ไม่ต้องพึ่งพาไฟล์ภายนอก)
+    function playSciFiSound(freq = 600, duration = 0.15) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.8, audioCtx.currentTime + duration);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {
+        // กรณี Browser บล็อกเสียงอัตโนมัติ
+      }
+    }
+
+    // ฟังก์ชันปลดล็อกเข้าสู่หน้าเว็บหลัก
+    function unlockSystem() {
+      playSciFiSound(520, 0.25);
+      const gate = document.getElementById('gate-screen');
+      const main = document.getElementById('main-content');
+      
+      gate.classList.add('unlocked');
+      main.classList.add('visible');
+    }
+
+    // ฟังก์ชันล็อกกลับมาหน้ากดเข้า
+    function lockSystem() {
+      playSciFiSound(300, 0.2);
+      const gate = document.getElementById('gate-screen');
+      const main = document.getElementById('main-content');
+      
+      gate.classList.remove('unlocked');
+      main.classList.remove('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal popup แสดงข้อมูล
+    function showNotice(title, message) {
+      playSciFiSound(700, 0.1);
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-message').innerText = message;
+      document.getElementById('custom-modal').classList.add('active');
+    }
+
+    function closeNotice() {
+      document.getElementById('custom-modal').classList.remove('active');
+    }
+
+    // ปิด Modal เมื่อคลิกพื้นที่ว่างข้างนอก
+    document.getElementById('custom-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeNotice();
+      }
+    });
+  </script>
 </body>
 </html>
